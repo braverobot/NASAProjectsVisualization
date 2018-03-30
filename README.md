@@ -1,4 +1,4 @@
-**My Coursera Capstone Project (No OOP)**
+**NASA Project Name keyword visualization**
 
 The getNasaProjects.py script pulls all of the projects from a specific date and loads them into a local sqlite3 db.
 
