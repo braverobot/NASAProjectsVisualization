@@ -6,7 +6,7 @@ The **wordMapCreate.py** script then reaches into that sqlite3 db and takes the 
 
 My scripts make use of the d3.layout.cloud.js and the d3.v2.js javascripts that are readily available at  http://www.jasondavies.com/word-cloud/ but provided in my repo for ease
 
-- To use, clone repo and build the database:
+- To use: clone repo and build the database running the following:
 ```
 python3 getNasaProjects.py
 ```
