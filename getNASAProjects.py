@@ -4,7 +4,7 @@ import sys
 import urllib.request, urllib.parse, urllib.error
 import json
 
-
+dbname= "projectdb.sqlite"
 baseurl = "https://techport.nasa.gov/api/projects/"
 
 # Ignore SSL certificate errors
@@ -13,11 +13,12 @@ ctx.check_hostname = False
 ctx.verify_mode = ssl.CERT_NONE
 
 # Create DB
-conn = sqlite3.connect('projectdb.sqlite')
+conn = sqlite3.connect(dbname)
 cur = conn.cursor()
 
 cur.execute('''CREATE TABLE IF NOT EXISTS Projects
-    (title TEXT, project_id INTEGER UNIQUE, website TEXT, last_updated DATE, lead_organization TEXT)''')
+    (title TEXT, project_id INTEGER UNIQUE, website TEXT, 
+    last_updated DATE, lead_organization TEXT)''')
 
 start = None
 
@@ -30,29 +31,28 @@ try:
 except:
     start = 0
 
-if start is None:
-    start = 0
-
 many = 0
 count = 0
 fail = 0
 
 if ( many < 1 ) :
     conn.commit()
-    #yval = input('Please specify the year for project list beginning:')
-    #mval = input('Please specify the numerical month for project list beginning:')
-    #dval = input('Please specify the numerical day for project list beginning:')
+    yval = input('Please specify the year for project list beginning:')
+    mval = input('Please specify the numerical month for project list beginning:')
+    dval = input('Please specify the numerical day for project list beginning:')
 
     yval = "2018"
     mval = "03"
     dval = "01"
+
+    beginningdate= (yval + '-' + mval + '-' + dval)
 
     if ( len(yval) is 0 or len(mval) is 0 or len(dval) is 0 ):
         print("Date not specified correctly")
         sys.exit()
     projectsurl = baseurl + '?updatedSince=' + beginningdate
 try:
-    # Open with a timeout of 05 seconds
+    # Open with a timeout of 5 seconds
     document = urllib.request.urlopen(projectsurl, None, 5, context=ctx)
     text = document.read().decode()
     parsed_json = json.loads(text)
@@ -101,8 +101,10 @@ except KeyboardInterrupt:
     print('Program interrupted by user...')
     sys.exit()
 
+
 conn.commit()
 cur.close()
+print("Data loaded, feel free to open the projectdb.sqlite database")
 
 
 
